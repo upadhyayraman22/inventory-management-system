@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stockroom | Inventory</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header class="masthead">
+    <div class="brand"><span class="brand-mark">S</span><div><h1>Stockroom</h1><p>Inventory command centre</p></div></div>
+    <button class="button button-primary" id="addProductButton" type="button">Add product <span>+</span></button>
+  </header>
+
+  <main class="app-shell">
+    <section class="summary-grid" aria-label="Inventory summary">
+      <article class="summary-card"><span>Total products</span><strong id="totalProducts">0</strong></article>
+      <article class="summary-card"><span>Units in stock</span><strong id="totalQuantity">0</strong></article>
+      <article class="summary-card accent"><span>Need attention</span><strong id="lowStock">0</strong><small id="thresholdLabel">At or below 5 units</small></article>
+      <article class="summary-card"><span>Inventory value</span><strong id="totalValue">₹0.00</strong></article>
+    </section>
+
+    <section class="workspace">
+      <div class="workspace-heading"><div><p class="eyebrow">CATALOGUE</p><h2>Products</h2></div><button class="button button-subtle" id="exportButton" type="button">Export CSV</button></div>
+      <div class="filters" aria-label="Product filters">
+        <label class="search-box"><span>⌕</span><input id="searchInput" type="search" placeholder="Search ID, product, or category..."></label>
+        <label class="select-label">Category<select id="categoryFilter"><option value="">All categories</option></select></label>
+        <label class="toggle-label"><input id="lowStockFilter" type="checkbox"><span>Low stock only</span></label>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Product ID</th>
+              <th><button class="sort-button" type="button" data-sort="name">Name <span aria-hidden="true"></span></button></th>
+              <th>Category</th>
+              <th><button class="sort-button" type="button" data-sort="quantity">Quantity <span aria-hidden="true"></span></button></th>
+              <th><button class="sort-button" type="button" data-sort="price">Price <span aria-hidden="true"></span></button></th>
+              <th>Status</th>
+              <th><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody id="productTable"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal hidden" id="productModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-box">
+      <div class="modal-head"><div><p class="eyebrow">PRODUCT DETAILS</p><h2 id="modalTitle">Add product</h2></div><button class="icon-button" id="closeModalButton" type="button" aria-label="Close">×</button></div>
+      <form id="productForm" novalidate>
+        <div class="form-grid">
+          <label>Product ID<input id="productId" maxlength="50" required aria-describedby="productIdError"><small class="field-error" id="productIdError"></small></label>
+          <label>Product name<input id="name" maxlength="120" required aria-describedby="nameError"><small class="field-error" id="nameError"></small></label>
+          <label>Category<input id="category" maxlength="80" required aria-describedby="categoryError"><small class="field-error" id="categoryError"></small></label>
+          <label>Quantity<input id="quantity" type="number" min="0" max="1000000000" step="1" required aria-describedby="quantityError"><small class="field-error" id="quantityError"></small></label>
+          <label>Price (₹)<input id="price" type="number" min="0" max="1000000000" step="0.01" required aria-describedby="priceError"><small class="field-error" id="priceError"></small></label>
+        </div>
+        <div class="form-actions"><button class="button button-plain" id="cancelButton" type="button">Cancel</button><button class="button button-primary" type="submit">Save product</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
